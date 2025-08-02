@@ -3,7 +3,7 @@ const router = express.Router();
 
 const groqController = require('../controllers/groqController');
 
-router.post('/', groqController.callGroq);
+router.post('/analyze', groqController.callGroq);
 
 module.exports = router;
 
