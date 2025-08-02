@@ -1,36 +1,49 @@
-/**
- * Controller for Tavily-related functionality
- */
-
 const { tavily } = require("@tavily/core");
 require('dotenv').config();
 
+const apiKey = process.env.TAVILY_API_KEY;
+// Initialize the Tavily client
+const tvly = tavily({ apiKey });
 
-// Perform a real Tavily search
+
+// Perform a Tavily search 
+// Input: name of product
+// returns a list of objects with url, score, and cleaned_link
+// cleaned_link is what we want to keep in the frontend to be passed to extractTavilyData
 exports.tavilySearch = async (req, res) => {
   try {
-    // Get the search query from the request body
+    // Get the product name from the request body
     const { query } = req.body;
     if (!query) {
       return res.status(400).json({ success: false, message: 'Query is required' });
     }
-    const apiKey = process.env.TAVILY_API_KEY;
+    // Augment the query with environmental context
+    const envQuery = `${query} mountain dew baja blast environmental impact carbon footprint sustainability lifecycle analysis site:greenchoicenow.com`;
+    
     if (!apiKey) {
       return res.status(500).json({ success: false, message: 'Tavily API key not set in .env' });
     }
-
-    // Initialize the Tavily client
-    const tvly = tavily({ apiKey });
     
-    const response = await tvly.search(query);          // Perform the search using the Tavily API
+    const response = await tvly.search(envQuery);          // Perform the search using the Tavily API
     // Filter the results to only include url and score
     let filtered = Array.isArray(response.results)
       ? response.results.map(({ url, score }) => ({ url, score }))
       : [];
-    // Sort by score descending and take the top 3, then map to just urls
-    const topUrls = filtered.sort((a, b) => b.score - a.score).slice(0, 3).map(r => r.url);
-    // Return only the list of URLs
-    res.json({ success: true, urls: topUrls });
+    // Sort by score descending and take the top 3
+    const topResults = filtered.sort((a, b) => b.score - a.score).slice(0, 3);
+    // Add cleaned_link to each result
+    const processedResults = topResults.map(({ url, score }) => {
+      let cleaned_link;
+      try {
+        const u = new URL(url);
+        cleaned_link = u.origin + u.pathname;
+      } catch (e) {
+        cleaned_link = url;
+      }
+      return { url, score, cleaned_link };
+    });
+    // Return the list of objects
+    res.json({ success: true, results: processedResults });
   } catch (error) {
     // Handle any errors and return a 500 error
     console.error('Error in Tavily search:', error);
@@ -40,12 +53,17 @@ exports.tavilySearch = async (req, res) => {
 
 exports.extractTavilyData = async (req, res) => {
   try {
+    console.log('Extracting Tavily data with body:', req.body);
     const { urls } = req.body;
-    const response = await tvly.extract(urls);
+    if (!urls || !Array.isArray(urls)) {
+      return res.status(400).json({ success: false, message: 'urls must be an array' });
+    }
+    const response = await tvly.extract(urls, { format: 'text' }); // Use Tavily Extract API with format: 'text' for plain text extraction
+
     return res.json({ success: true, data: response });
   } catch (error) {
     console.error('Error in extractTavilyData:', error);
-    return;
+    return res.status(500).json({ success: false, message: 'Internal server error', error: error.message });
   }
 }
 
