@@ -67,3 +67,41 @@ exports.extractTavilyData = async (req, res) => {
   }
 }
 
+exports.tavilyCrawl = async (req, res) => {
+  // 1) Basic presence + type checks
+  let { url, productName } = req.body;
+
+  if (!url || typeof url !== "string") {
+    return res.status(400).json({ success: false, message: '"url" is required and must be a string' });
+  }
+  if (!productName || typeof productName !== "string") {
+    return res.status(400).json({ success: false, message: '"productName" is required and must be a string' });
+  }
+
+  // Trim & sanitise
+  url = url.trim();
+  productName = productName.trim().replace(/`/g, ""); // remove back-ticks that could break a template
+
+  if (!tvly) {
+    return res.status(500).json({ success: false, message: "Tavily client not initialised – check API key" });
+  }
+
+  try {
+    const response = await tvly.crawl(url, {
+      instructions: `Find all pages that are related to ${productName}`,
+      max_depth: 2,         // snake-case matches API spec
+      limit: 15,
+      include_images: false,
+    });
+
+    return res.json({ success: true, ...response });
+  } catch (error) {
+    const status = error?.response?.status || 500;
+    console.error("Error in tavilyCrawl:", error);
+    return res.status(status).json({
+      success: false,
+      message: "Failed to crawl with Tavily",
+      error: error.message,
+    });
+  }
+}; 

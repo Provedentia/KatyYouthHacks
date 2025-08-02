@@ -12,4 +12,6 @@ router.post('/search', tavilyController.tavilySearch);
 
 router.post('/extract', tavilyController.extractTavilyData);
 
+router.post('/crawl', tavilyController.tavilyCrawl);
+
 module.exports = router;
