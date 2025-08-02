@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mainRoutes = require('./routes/mainRoutes');
-const tavilyRoutes = require('./routes/tavily');
+const tavilyRoutes = require('./routes/tavilyRoutes');
 const groqRoutes = require('./routes/groqRoutes');
 require('dotenv').config();
 
