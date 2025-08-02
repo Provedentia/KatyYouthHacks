@@ -2,58 +2,50 @@
  * Controller for Tavily-related functionality
  */
 
-// Get data from Tavily
-exports.getTavilyData = (req, res) => {
+const { tavily } = require("@tavily/core");
+require('dotenv').config();
+
+
+// Perform a real Tavily search
+exports.tavilySearch = async (req, res) => {
   try {
-    // This is a placeholder response
-    // In a real application, you might call the Tavily API here
-    res.json({
-      success: true,
-      message: 'Tavily endpoint reached successfully',
-      data: {
-        name: 'Tavily API',
-        status: 'active',
-        timestamp: new Date().toISOString()
-      }
-    });
+    // Get the search query from the request body
+    const { query } = req.body;
+    if (!query) {
+      return res.status(400).json({ success: false, message: 'Query is required' });
+    }
+    const apiKey = process.env.TAVILY_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ success: false, message: 'Tavily API key not set in .env' });
+    }
+
+    // Initialize the Tavily client
+    const tvly = tavily({ apiKey });
+    
+    const response = await tvly.search(query);          // Perform the search using the Tavily API
+    // Filter the results to only include url and score
+    let filtered = Array.isArray(response.results)
+      ? response.results.map(({ url, score }) => ({ url, score }))
+      : [];
+    // Sort by score descending and take the top 3, then map to just urls
+    const topUrls = filtered.sort((a, b) => b.score - a.score).slice(0, 3).map(r => r.url);
+    // Return only the list of URLs
+    res.json({ success: true, urls: topUrls });
   } catch (error) {
-    console.error('Error in Tavily endpoint:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error.message
-    });
+    // Handle any errors and return a 500 error
+    console.error('Error in Tavily search:', error);
+    res.status(500).json({ success: false, message: 'Internal server error', error: error.message });
   }
 };
 
-// Process data through Tavily
-exports.processTavilyQuery = (req, res) => {
+exports.extractTavilyData = async (req, res) => {
   try {
-    const { query } = req.body;
-    
-    if (!query) {
-      return res.status(400).json({
-        success: false,
-        message: 'Query is required'
-      });
-    }
-    
-    // Process the query (placeholder for Tavily API integration)
-    res.json({
-      success: true,
-      message: 'Query processed successfully',
-      query,
-      results: [
-        { id: 1, title: 'Sample result 1' },
-        { id: 2, title: 'Sample result 2' }
-      ]
-    });
+    const { urls } = req.body;
+    const response = await tvly.extract(urls);
+    return res.json({ success: true, data: response });
   } catch (error) {
-    console.error('Error processing Tavily request:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: error.message
-    });
+    console.error('Error in extractTavilyData:', error);
+    return;
   }
-};
+}
+
