@@ -24,7 +24,7 @@ exports.updateUserScore = async (userid, points) => {
     // Get user profile for metadata
     const { data: profile, error: profileError } = await supabaseAdmin
       .from('profiles')
-      .select('first_name, last_name')
+      .select('first_name, last_name, score')
       .eq('id', userid)
       .single();
 
@@ -33,11 +33,14 @@ exports.updateUserScore = async (userid, points) => {
       return false;
     }
 
+    old_score = profile.score || 0;
+    new_score = old_score + points;
+
     // Update user score in profiles table directly
     const { data, error } = await supabaseAdmin
       .from('profiles')
       .update({ 
-        score: (profile.score || 0) + points,
+        score: new_score,
         first_name: profile?.first_name || 'User',
         last_name: profile?.last_name || ''
       })
