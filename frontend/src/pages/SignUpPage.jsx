@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 // Assume these work
 import { registerUser } from '../services/authService';
 
@@ -44,8 +45,13 @@ const SignUpPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-emerald-50 to-teal-100">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-emerald-800 mb-6 text-center">Sign Up for Sustain-ify</h2>
+      <motion.div
+        className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+      >
+        <h2 className="text-3xl font-bold text-emerald-800 mb-6 text-center">Sign Up for Thrivable</h2>
         <form onSubmit={handleSignUp} className="space-y-4">
           <input
             type="text"
@@ -100,7 +106,7 @@ const SignUpPage = () => {
           Already have an account?{' '}
           <button className="text-emerald-700 hover:underline" onClick={() => navigate('/login')}>Login</button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

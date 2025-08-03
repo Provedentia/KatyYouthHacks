@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, Loader2 } from 'lucide-react';
+import { AlertTriangle, Loader2, Trophy } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/common/PageHeader';
 import ImageCapture from '../components/ImageCapture/ImageCapture';
@@ -19,9 +19,7 @@ function GetStartedPage() {
   const [error, setError] = useState('');
   const [scoreUpdateStatus, setScoreUpdateStatus] = useState(null);
 
-  const handleBack = () => {
-    navigate('/');
-  };
+  // Removed handleBack function as it's no longer needed
 
   const handleImageCapture = (imageData) => {
     setCapturedImage(imageData);
@@ -129,9 +127,10 @@ function GetStartedPage() {
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-100 font-sans">
       <PageHeader 
         title="Thrivable" 
-        onBack={handleBack} 
         onProfile={() => navigate('/user-profile')}
-        showBackButton={true}
+        onLeaderboard={() => navigate('/leaderboard')}
+        onDashboard={() => navigate('/dashboard')}
+        showBackButton={false}
       />
 
       {/* Main Content */}

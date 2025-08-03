@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Scan, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import thrivableLogo from '../assets/thrivable-logo.png';
 
 
 
@@ -24,11 +25,7 @@ function LandingPage() {
           transition={{ duration: 0.5 }}
         >
           <div className="flex items-center gap-2">
-            <motion.div 
-              className="w-8 h-8 bg-emerald-500 rounded-full"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            />
+            <img src={thrivableLogo} alt="Thrivable Logo" className="w-10 h-10 object-contain rounded-full" />
             <h1 className="text-2xl font-bold text-emerald-800">Thrivable</h1>
           </div>
           <div className="hidden md:flex gap-8">
