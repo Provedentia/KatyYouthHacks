@@ -6,7 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-
+const checkAuth = require('../middleware/checkAuth');
 /**
  * @route   POST /api/auth/register
  * @desc    Register new user account
@@ -61,7 +61,7 @@ router.get('/verify-email', authController.verifyEmail);
  * @access  Protected
  * @headers Authorization: Bearer <token>
  */
-router.get('/profile', authController.getUserProfile);
+router.get('/user-profile', checkAuth, authController.getUserProfile);
 
 /**
  * @route   PUT /api/auth/profile
