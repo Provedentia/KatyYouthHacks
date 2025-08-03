@@ -46,14 +46,26 @@ export async function identifyBrandWithImage(imageData) {
     const formData = new FormData();
     formData.append('image', blob, 'upload.jpg');
 
-    const response = await axios.post('http://localhost:3000/api/identify-brand/identify-brand', formData, {
+    const response = await axios.post('http://localhost:3000/api/identify-brand', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response.data;
+    // Only return name and filtered allLabels as a formatted string
+    const { result, allLabels } = response.data || {};
+    let filteredLabels = [];
+    if (Array.isArray(allLabels)) {
+      filteredLabels = allLabels.filter(label => label.toLowerCase().includes('aluminum'));
+      if (filteredLabels.length === 0) {
+        filteredLabels = allLabels.slice(0, 3);
+      }
+    }
+    // Format as a single string: name + space + all labels joined by space
+    const formatted = [result?.name || '', ...filteredLabels].join(' ').trim();
+    return formatted;
   } catch (error) {
     console.error('Error sending image to Google Vision identify-brand:', error);
     throw error;
   }
 }
+
