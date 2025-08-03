@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Lightbulb, Users, GraduationCap, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import thrivableLogo from '../assets/thrivable-logo.png';
 
 // NavLink component to match the Landing Page
 const NavLink = ({ children, onClick }) => (
@@ -34,12 +35,7 @@ const AboutPage = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="flex items-center gap-2">
-            <motion.div 
-              className="w-8 h-8 bg-emerald-500 rounded-full"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => navigate('/')}
-            />
+            <img src={thrivableLogo} alt="Thrivable Logo" className="w-10 h-10 object-contain rounded-full cursor-pointer" onClick={() => navigate('/')} />
             <h1 className="text-2xl font-bold text-emerald-800">Thrivable</h1>
           </div>
           <div className="hidden md:flex gap-8">
@@ -72,25 +68,47 @@ const AboutPage = () => {
         </motion.div>
       </header>
       
-      {/* Hero Section with Image */}
-      <section className="container mx-auto px-6 py-8">
+      {/* Hero Section with Integrated Logo */}
+      <section className="container mx-auto px-6 py-12 relative">
+        {/* Background decorations */}
+        <div className="absolute top-10 left-10 w-32 h-32 bg-emerald-100 rounded-full opacity-50 blur-xl"></div>
+        <div className="absolute bottom-10 right-10 w-48 h-48 bg-teal-100 rounded-full opacity-40 blur-xl"></div>
+        
         <motion.div 
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto text-center relative"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="text-center mb-8">
+          {/* Integrated logo and heading */}
+          <motion.div
+            className="flex flex-col items-center justify-center mb-8"
+            initial={{ opacity: 0, scale: 0.7, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.7, type: 'spring', bounce: 0.4 }}
+          >
+            <motion.img
+              src={thrivableLogo}
+              alt="Thrivable Logo"
+              className="w-40 h-40 object-contain mb-6 drop-shadow-xl"
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.7, type: 'spring', bounce: 0.5, delay: 0.1 }}
+            />
             <h1 className="text-4xl md:text-5xl font-bold text-emerald-900 mb-4">Our Story</h1>
-            <div className="h-1 w-24 bg-emerald-500 mx-auto rounded-full"></div>
-          </div>
+            <div className="h-1 w-24 bg-emerald-500 mx-auto rounded-full mb-8"></div>
+            
+            <p className="text-lg text-emerald-700 max-w-2xl mx-auto leading-relaxed">
+              Born from our collective passion for environmental sustainability, Thrivable started as a KatyYouthHacks 2025 project with a simple idea: what if we could help people make better ecological choices every day?
+            </p>
+          </motion.div>
         </motion.div>
       </section>
 
-      <section className="container mx-auto px-6 pb-16">
+      <section className="container mx-auto px-6 py-10">
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
           <div className="md:flex">
-            <div className="md:w-1/2 bg-emerald-600 p-8 text-white flex items-center">
+            <div className="md:w-1/2 bg-gradient-to-br from-emerald-600 to-teal-700 p-8 text-white flex items-center">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -101,19 +119,19 @@ const AboutPage = () => {
                   We're building a future where sustainable choices are easy, informed, and rewarding.
                 </p>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-emerald-500 rounded-full">
+                  <div className="p-2 bg-emerald-500/40 backdrop-blur-sm rounded-full">
                     <Lightbulb size={20} />
                   </div>
                   <span className="font-medium">Innovation in Sustainability</span>
                 </div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-emerald-500 rounded-full">
+                  <div className="p-2 bg-emerald-500/40 backdrop-blur-sm rounded-full">
                     <Users size={20} />
                   </div>
                   <span className="font-medium">Student-Led Initiative</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-emerald-500 rounded-full">
+                  <div className="p-2 bg-emerald-500/40 backdrop-blur-sm rounded-full">
                     <Sparkles size={20} />
                   </div>
                   <span className="font-medium">KatyYouthHacks 2025 Project</span>
@@ -144,78 +162,102 @@ const AboutPage = () => {
 
       <section className="container mx-auto px-6 py-12">
         <motion.div 
-          className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8"
+          className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 md:p-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="text-center mb-8">
-            <div className="inline-block p-3 bg-emerald-50 rounded-full mb-2">
+          <div className="text-center mb-10">
+            <motion.div 
+              className="inline-block p-3 bg-emerald-50 rounded-full mb-4"
+              whileHover={{ scale: 1.1, backgroundColor: "#10b981", color: "#ffffff" }}
+            >
               <GraduationCap className="w-8 h-8 text-emerald-600" />
-            </div>
+            </motion.div>
             <h2 className="text-3xl font-bold text-emerald-800 mb-2">The Team</h2>
             <p className="text-emerald-600">Meet the students behind Thrivable</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 mt-8">
             <motion.div 
-              className="p-5 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-4"
-              whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              initial={{ opacity: 0, y: 10 }}
+              className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-5 hover:border-emerald-300 transition-colors"
+              whileHover={{ 
+                scale: 1.03, 
+                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                y: -5
+              }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
             >
-              <div className="w-14 h-14 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xl">CD</div>
+              <div className="w-16 h-16 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xl shadow-md">CD</div>
               <div>
-                <h3 className="font-bold text-emerald-800">Chad Diao</h3>
+                <h3 className="font-bold text-lg text-emerald-800">Chad Diao</h3>
                 <p className="text-emerald-600 text-sm">Rice University</p>
               </div>
             </motion.div>
 
             <motion.div 
-              className="p-5 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-4"
-              whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              initial={{ opacity: 0, y: 10 }}
+              className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-5 hover:border-emerald-300 transition-colors"
+              whileHover={{ 
+                scale: 1.03, 
+                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                y: -5
+              }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
             >
-              <div className="w-14 h-14 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xl">SA</div>
+              <div className="w-16 h-16 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xl shadow-md">SA</div>
               <div>
-                <h3 className="font-bold text-emerald-800">Suhaib Aden</h3>
+                <h3 className="font-bold text-lg text-emerald-800">Suhaib Aden</h3>
                 <p className="text-emerald-600 text-sm">Northwestern University</p>
               </div>
             </motion.div>
 
             <motion.div 
-              className="p-5 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-4"
-              whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              initial={{ opacity: 0, y: 10 }}
+              className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-5 hover:border-emerald-300 transition-colors"
+              whileHover={{ 
+                scale: 1.03, 
+                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                y: -5
+              }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
             >
-              <div className="w-14 h-14 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xl">BK</div>
+              <div className="w-16 h-16 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xl shadow-md">BK</div>
               <div>
-                <h3 className="font-bold text-emerald-800">Brian Kim</h3>
+                <h3 className="font-bold text-lg text-emerald-800">Brian Kim</h3>
                 <p className="text-emerald-600 text-sm">Columbia University</p>
               </div>
             </motion.div>
 
             <motion.div 
-              className="p-5 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-4"
-              whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              initial={{ opacity: 0, y: 10 }}
+              className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-5 hover:border-emerald-300 transition-colors"
+              whileHover={{ 
+                scale: 1.03, 
+                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                y: -5
+              }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.4 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
             >
-              <div className="w-14 h-14 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xl">DS</div>
+              <div className="w-16 h-16 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xl shadow-md">DS</div>
               <div>
-                <h3 className="font-bold text-emerald-800">Daniel Sung</h3>
+                <h3 className="font-bold text-lg text-emerald-800">Daniel Sung</h3>
                 <p className="text-emerald-600 text-sm">Johns Hopkins University</p>
               </div>
             </motion.div>
           </div>
 
-          <div className="mt-10 pt-6 border-t border-emerald-100">
+          <motion.div 
+            className="mt-12 pt-6 border-t border-emerald-100"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
             <div className="flex flex-wrap items-center justify-between">
               <div className="mb-4 md:mb-0">
                 <h3 className="text-xl font-semibold text-emerald-800 mb-2">Event Information</h3>
@@ -223,8 +265,8 @@ const AboutPage = () => {
                   href="https://katyyouthhacks2025.devpost.com/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-800"
-                  whileHover={{ scale: 1.02 }}
+                  className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-800 transition-colors"
+                  whileHover={{ scale: 1.02, x: 3 }}
                 >
                   <span>KatyYouthHacks 2025</span>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -233,7 +275,7 @@ const AboutPage = () => {
                 </motion.a>
               </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </section>
     </div>

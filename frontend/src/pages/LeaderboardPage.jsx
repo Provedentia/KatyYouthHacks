@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Loader2, Trophy, Medal, Award, Star } from 'lucide-react';
 
 const LeaderboardPage = () => {
+    const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [leaders, setLeaders] = useState([]);
@@ -75,7 +76,13 @@ const LeaderboardPage = () => {
 
     return (    
         <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-100 font-sans">
-            <PageHeader title="Leaderboard" />
+            <PageHeader 
+                title="Thrivable" 
+                onProfile={() => navigate('/user-profile')}
+                onLeaderboard={() => navigate('/leaderboard')}
+                onDashboard={() => navigate('/dashboard')}
+                showBackButton={false} 
+            />
             
             {/* Main Content */}
             <div className="container mx-auto px-6 py-8">

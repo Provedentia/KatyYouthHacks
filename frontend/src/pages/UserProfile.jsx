@@ -51,7 +51,13 @@ const UserProfile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-100 font-sans">
-      <PageHeader title="Thrivable" onBack={() => navigate('/dashboard')} showBackButton={true} />
+      <PageHeader 
+        title="Thrivable" 
+        onProfile={() => navigate('/user-profile')}
+        onLeaderboard={() => navigate('/leaderboard')}
+        onDashboard={() => navigate('/dashboard')}
+        showBackButton={false} 
+      />
       
       <motion.div 
         className="container mx-auto px-6 py-8"
