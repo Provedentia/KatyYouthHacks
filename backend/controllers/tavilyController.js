@@ -19,7 +19,9 @@ exports.tavilySearch = async (req, res) => {
     }
     
     // Augment the query with environmental context
-    const envQuery = `${query} site:greenchoicenow.com`;
+    // carboncloud.com is a site that has a lot of environmental information
+    // site:greenchoicenow.com is a site that has a lot of environmental information
+    const envQuery = `search for websites or blogs that mention ${query} and their environmental impact, carbon footprint (look for metrics such as CO2/kg), sustainability of using that product. Specifically target short blogs. Do not include news articles, journals like sciencedirect, or long articles.`;
     
     console.log('Tavily search query:', envQuery);
 
@@ -32,8 +34,8 @@ exports.tavilySearch = async (req, res) => {
     let filtered = Array.isArray(response.results)
       ? response.results.map(({ url, score }) => ({ url, score }))
       : [];
-    // Sort by score descending and take the top 3
-    const topResults = filtered.sort((a, b) => b.score - a.score).slice(0, 3);
+    // Sort by score descending and take the top 2
+    const topResults = filtered.sort((a, b) => b.score - a.score).slice(0, 2);
     // Add cleaned_link to each result
     const processedResults = topResults.map(({ url, score }) => {
       let cleaned_link;
@@ -64,6 +66,16 @@ exports.extractTavilyData = async (req, res) => {
       return res.status(400).json({ success: false, message: 'urls must be an array' });
     }
     const response = await tvly.extract(urls, { format: 'text' }); // Use Tavily Extract API with format: 'text' for plain text extraction
+
+    // Truncate each result's content to 20000 characters max
+    if (response && Array.isArray(response.results)) {
+      response.results = response.results.map(r => {
+        if (typeof r.rawContent === 'string' && r.rawContent.length > 20000) {
+          return { ...r, rawContent: r.rawContent.slice(0, 20000) };
+        }
+        return r;
+      });
+    }
 
     console.log('Tavily extract response:', response);
     return res.json({ success: true, data: response });
@@ -114,4 +126,4 @@ exports.tavilyCrawl = async (req, res) => {
       error: error.message,
     });
   }
-}; 
+};

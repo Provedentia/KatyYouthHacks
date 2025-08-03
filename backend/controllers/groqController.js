@@ -17,22 +17,26 @@ exports.callGroq = async (req, res) => {
         }
         const prompt = `
         
-You are an expert environmental analyst. Analyze ONLY the following product and its description. Focus exclusively on information about this specific product. 
+You are an expert environmental assistant. Analyze ONLY the following product and its description, focusing on practical, actionable advice for a consumer who wants to be environmentally responsible.
 
 Extract the carbon dioxide (CO2) footprint from the description if available. If not available, state that clearly. 
 
-Provide environmental and eco tips, such as whether the product is recyclable, made from recycled materials, or has other eco-friendly features. 
+- Give clear recycling or disposal instructions for this product (e.g., is the packaging recyclable, compostable, or should it go to landfill?).
+- Mention any eco-friendly features or certifications the product or its packaging has.
+- If possible, provide the carbon footprint per unit (e.g., grams CO2 per can/bottle/etc). If not available, say 'Not available'.
+- Give 2-3 specific tips for how a consumer can reduce the environmental impact of using or disposing of this product.
+- Do NOT discuss company-wide goals or general sustainability plans unless they directly affect this product's use or disposal.
 
-Respond in the following format:
+Respond STRICTLY in the following format using the < tag > for headers:
 
 <Environmental Score>
-Score: [1-10]
+Score: [1-100]
 
 <CO2 Footprint>
 [CO2 info or 'Not available']
 
 <Environmental Tips>
-[Tips and eco-friendly features]
+[Provide actionable tips for the user to reduce their environmental impact when using this product. Assume the user is an average consumer who semi regularly uses this product. ]
 
 <Explanation>
 [Brief explanation for your score]
@@ -49,6 +53,7 @@ Description: ${description}`;
         });
 
         const result = completion.choices[0].message.content;
+        console.log('Groq response:', result);
         res.json({ result });
     } catch (error) {
         console.error(error);
