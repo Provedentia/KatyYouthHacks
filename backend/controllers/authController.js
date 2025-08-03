@@ -44,11 +44,16 @@ const authenticateUser = async (req) => {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
       const userId = payload.id;
 
-      // Fetch full user info from Supabase using service role key
-      const { data: user, error } = await supabaseAdmin.auth.admin.getUserById(userId);
+      // Fetch user profile from profiles table
+      const { data: user, error } = await supabaseAdmin
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
       if (error || !user) {
         return { error: 'User not found', status: 401 };
       }
+      console.log('user profile:', user);
       return { user, token };
     } catch (err) {
       return { error: 'Invalid or expired token', status: 401 };
@@ -661,4 +666,4 @@ exports.deleteUserAccount = async (req, res) => {
       error: 'Internal server error'
     });
   }
-}; 
+};
