@@ -4,6 +4,7 @@
  */
 
 const { supabase, supabaseAdmin } = require('../config/supabase');
+const { signToken } = require('../utils/jwt');
 
 /**
  * Helper function to validate email format
@@ -103,6 +104,7 @@ exports.registerUser = async (req, res) => {
       });
     }
 
+    const token = signToken(data.user.id);
     // Insert row into profiles table
     const { error: profileError } = await supabaseAdmin.from('profiles').insert({
       id: data.user.id,
@@ -121,6 +123,7 @@ exports.registerUser = async (req, res) => {
     // Successful registration
     res.status(201).json({
       success: true,
+      token,
       data: {
         user: {
           id: data.user.id,
@@ -194,9 +197,11 @@ exports.loginUser = async (req, res) => {
       });
     }
 
+    const token = signToken(data.user.id);
     // Successful login
     res.status(200).json({
       success: true,
+      token,
       data: {
         user: {
           id: data.user.id,

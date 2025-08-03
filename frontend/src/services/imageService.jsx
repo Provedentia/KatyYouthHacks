@@ -18,7 +18,7 @@ export async function sendImageToBackend(imageData) {
     const formData = new FormData();
     formData.append('image', blob, 'upload.jpg');
 
-    const response = await axios.post('http://localhost:3000/api/identify-brand/test-upload', formData, {
+    const response = await axios.post('http://localhost:3000/api/test-upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -46,7 +46,7 @@ export async function identifyBrandWithImage(imageData) {
     const formData = new FormData();
     formData.append('image', blob, 'upload.jpg');
 
-    const response = await axios.post('http://localhost:3000/api/identify-brand/identify-brand', formData, {
+    const response = await axios.post('http://localhost:3000/api/identify-brand', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
