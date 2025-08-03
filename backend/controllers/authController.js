@@ -103,6 +103,21 @@ exports.registerUser = async (req, res) => {
       });
     }
 
+    // Insert row into profiles table
+    const { error: profileError } = await supabaseAdmin.from('profiles').insert({
+      id: data.user.id,
+      email: email.toLowerCase().trim(),
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
+      score: 0
+    });
+
+    
+    if (profileError) {
+      console.error('Profile insert error:', profileError.message);
+      // Not failing registration; continue.
+    }
+
     // Successful registration
     res.status(201).json({
       success: true,
