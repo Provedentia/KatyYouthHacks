@@ -76,8 +76,9 @@ function GetStartedPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-100 font-sans">
       <PageHeader 
-        title="Sustain-ify" 
+        title="Thrivable" 
         onBack={handleBack} 
+        onProfile={() => navigate('/user-profile')}
         showBackButton={true}
       />
 

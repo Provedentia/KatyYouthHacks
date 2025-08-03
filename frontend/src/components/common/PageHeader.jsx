@@ -2,7 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 
-const PageHeader = ({ title, onBack, showBackButton = true }) => {
+import { User } from 'lucide-react';
+
+const PageHeader = ({ title, onBack, onProfile, showBackButton = true }) => {
   return (
     <header className="container mx-auto px-6 py-6">
       <motion.div 
@@ -20,6 +22,30 @@ const PageHeader = ({ title, onBack, showBackButton = true }) => {
           <h1 className="text-2xl font-bold text-emerald-800">{title}</h1>
         </div>
         
+        <div className="flex items-center gap-4">
+          {showBackButton && (
+            <motion.button 
+              onClick={onBack}
+              className="flex items-center gap-2 text-emerald-700 hover:text-emerald-500 font-medium cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </motion.button>
+          )}
+                    {onProfile && (
+            <motion.button
+              onClick={onProfile}
+              className="flex items-center gap-2 text-emerald-700 hover:text-emerald-500 font-medium cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <User className="w-4 h-4" />
+              Profile
+            </motion.button>
+          )}
+        </div>
         {showBackButton && (
           <motion.button 
             onClick={onBack}

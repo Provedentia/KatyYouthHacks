@@ -25,24 +25,35 @@ const isValidPassword = (password) => {
 /**
  * Helper function to authenticate user from token
  */
-const authenticateUser = async (req) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return { error: 'No token provided', status: 401 };
-  }
+const jwt = require('jsonwebtoken');
 
-  const token = authHeader.replace('Bearer ', '');
-  
-  try {
-    const { data: user, error } = await supabase.auth.getUser(token);
-    if (error || !user) {
+const authenticateUser = async (req) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return { error: 'No token provided', status: 401 };
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+
+    if (!process.env.JWT_SECRET) {
+      return { error: 'Server misconfiguration', status: 500 };
+    }
+
+    try {
+      // Verify our custom JWT
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = payload.id;
+
+      // Fetch full user info from Supabase using service role key
+      const { data: user, error } = await supabaseAdmin.auth.admin.getUserById(userId);
+      if (error || !user) {
+        return { error: 'User not found', status: 401 };
+      }
+      return { user, token };
+    } catch (err) {
       return { error: 'Invalid or expired token', status: 401 };
     }
-    return { user: user.user, token };
-  } catch (error) {
-    return { error: 'Authentication failed', status: 401 };
-  }
-};
+  };
 
 /**
  * Register new user
@@ -427,20 +438,19 @@ exports.getUserProfile = async (req, res) => {
       });
     }
 
-    const user = authResult.user;
+    const raw = authResult.user;
+    const user = raw.user ? raw.user : raw;
 
+    console.log(user);
     res.status(200).json({
       success: true,
       data: {
         user: {
           id: user.id,
           email: user.email,
-          firstName: user.user_metadata.first_name,
-          lastName: user.user_metadata.last_name,
-          fullName: user.user_metadata.full_name,
-          emailConfirmed: user.email_confirmed_at !== null,
-          createdAt: user.created_at,
-          lastSignIn: user.last_sign_in_at
+          firstName: user.first_name || user.user_metadata?.first_name,
+          lastName: user.last_name || user.user_metadata?.last_name,
+          score: user.score || 0
         }
       }
     });
@@ -484,7 +494,7 @@ exports.updateUserProfile = async (req, res) => {
       data: {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
-        full_name: `${firstName.trim()} ${lastName.trim()}`
+        full_name: `${firstName.trim()} ${lastName.trim()}`, 
       }
     });
 
