@@ -161,6 +161,7 @@ const EnvironmentalImpactTab = ({ capturedImage, groqResult, isLoading }) => {
     co2 = co2Match ? co2Match[1].trim() : null;
     tips = tipsMatch ? tipsMatch[1].trim() : null;
     explanation = explanationMatch ? explanationMatch[1].trim() : null;
+    console.log('Parsed Groq Score:', score);
   }
   return (
     <div className="space-y-6">
