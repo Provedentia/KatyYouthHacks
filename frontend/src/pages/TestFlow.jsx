@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { analyzeProduct, searchProduct, extractLinks } from '../services/searchService';
-import { analyzeGroq, keepRelevantText } from '../services/groqService';
+import { analyzeGroq } from '../services/groqService';
 
 const TestFlow = () => {
   const [product, setProduct] = useState('mountain dew baja blast');
@@ -105,19 +105,11 @@ const TestFlow = () => {
         if (extractRes && extractRes.data && Array.isArray(extractRes.data.results)) {
           combinedText = extractRes.data.results.map(r => r.rawContent).join('\n\n');
         }
-        console.log('Combined Extracted Text:', combinedText);
 
-        // Send to keepRelevantText before Groq
-        let relevantText = combinedText;
-        try {
-          const keepRelevantRes = await keepRelevantText(combinedText, product);
-          relevantText = keepRelevantRes.relevantText || combinedText;
-        } catch (err) {
-          console.error('Error in keepRelevantText:', err);
-        }
-
-        if (relevantText) {
-          const groqRes = await analyzeGroq(product, relevantText);
+        // Directly send combinedText to analyzeGroq (remove keepRelevantText)
+        if (combinedText) {
+          const groqRes = await analyzeGroq(product, combinedText);
+            console.log('Groq Result:', groqRes);
           setGroqResult(groqRes);
         } else {
           setGroqResult({ message: 'No relevant text to analyze.' });
@@ -207,12 +199,17 @@ const TestFlow = () => {
         <div className="mt-6 p-4 border rounded bg-pink-50">
           <h3 className="font-semibold mb-2">Groq Analysis Result:</h3>
           {(() => {
-            // Try to parse the result into sections
-            const resultText = groqResult.result || '';
-            const scoreMatch = resultText.match(/<Environmental Score>\s*Score: ([^\n]+)/i);
-            const co2Match = resultText.match(/<CO2 Footprint>\s*([^<]+)/i);
-            const tipsMatch = resultText.match(/<Environmental Tips>\s*([\s\S]*?)\n\n<Explanation>/i);
-            const explanationMatch = resultText.match(/<Explanation>\s*([\s\S]*)/i);
+            // Try to parse the result into sections, fallback to markdown if not structured
+            const resultText = groqResult.result || groqResult.message || '';
+            // Try to match headers (Markdown style or custom)
+            const scoreMatch = resultText.match(/\*\*Environmental Score:([^\n*]*)/i) || resultText.match(/<Environmental Score>\s*Score: ([^\n]+)/i);
+            const co2Match = resultText.match(/\*\*CO2 Footprint:([^\n*]*)/i) || resultText.match(/<CO2 Footprint>\s*([^<]+)/i);
+            const tipsMatch = resultText.match(/\*\*Environmental Tips:\*\*([\s\S]*?)(\*\*|<Explanation>|$)/i) || resultText.match(/<Environmental Tips>\s*([\s\S]*?)(\n\n<Explanation>|$)/i);
+            const explanationMatch = resultText.match(/\*\*Explanation:\*\*([\s\S]*)/i) || resultText.match(/<Explanation>\s*([\s\S]*)/i);
+            // If not all sections found, fallback to rendering as markdown
+            if (!scoreMatch && !co2Match && !tipsMatch && !explanationMatch) {
+              return <pre className="whitespace-pre-wrap text-xs">{resultText}</pre>;
+            }
             return (
               <div>
                 <div className="mb-2"><strong>Environmental Score:</strong> {scoreMatch ? scoreMatch[1].trim() : 'N/A'}</div>

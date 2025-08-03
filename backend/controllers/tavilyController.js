@@ -19,7 +19,7 @@ exports.tavilySearch = async (req, res) => {
     }
     
     // Augment the query with environmental context
-    const envQuery = `${query} environmental impact carbon footprint sustainability lifecycle analysis site:greenchoicenow.com`;
+    const envQuery = `${query} site:greenchoicenow.com`;
     
     console.log('Tavily search query:', envQuery);
 
