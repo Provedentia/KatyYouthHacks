@@ -100,7 +100,7 @@ function GetStartedPage() {
               <div className="mt-4 flex flex-col items-center">
                 <button
                   onClick={handleAnalyzeImage}
-                  className="bg-emerald-600 text-white px-4 py-2 rounded disabled:opacity-50 flex items-center gap-2"
+                  className="bg-emerald-600 text-white px-4 py-2 rounded disabled:opacity-50 flex items-center gap-2 cursor-pointer"
                   disabled={isLoading}
                 >
                   {isLoading ? (
