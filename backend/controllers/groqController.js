@@ -26,6 +26,8 @@ Extract the carbon dioxide (CO2) footprint from the description if available. If
 - If possible, provide the carbon footprint per unit (e.g., grams CO2 per can/bottle/etc). If not available, say 'Not available'.
 - Give 2-3 specific tips for how a consumer can reduce the environmental impact of using or disposing of this product.
 - Do NOT discuss company-wide goals or general sustainability plans unless they directly affect this product's use or disposal.
+- Do not use any markdown formatting like ** in your response.
+- If you are not sure about the product or its description, set the Environmental Score to 0.
 
 Respond STRICTLY in the following format using the < tag > for headers:
 
@@ -36,7 +38,7 @@ Score: [1-100]
 [CO2 info or 'Not available']
 
 <Environmental Tips>
-[Provide actionable tips for the user to reduce their environmental impact when using this product. Assume the user is an average consumer who semi regularly uses this product. ]
+[Provide actionable tips for the user to reduce their environmental impact when using this product. Assume the user is an average consumer who semi regularly uses this product. Give recommendations for more sustainable alternatives. ]
 
 <Explanation>
 [Brief explanation for your score]

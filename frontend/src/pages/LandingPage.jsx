@@ -8,8 +8,11 @@ import { useNavigate } from 'react-router-dom';
 function LandingPage() {
   const navigate = useNavigate();
   const handleGetStarted = () => {
-    navigate('/get-started');
-  }
+    navigate('/signup');
+  };
+  const handleLogin = () => {
+    navigate('/login');
+  };
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-100 font-sans">
       {/* Header */}
@@ -26,21 +29,31 @@ function LandingPage() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             />
-            <h1 className="text-2xl font-bold text-emerald-800">Sustain-ify</h1>
+            <h1 className="text-2xl font-bold text-emerald-800">Thrivable</h1>
           </div>
           <div className="hidden md:flex gap-8">
             <NavLink>Features</NavLink>
             <NavLink>About</NavLink>
             <NavLink>Contact</NavLink>
           </div>
-          <motion.button 
-            className="bg-emerald-600 text-white px-6 py-2 rounded-full font-medium cursor-pointer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleGetStarted}
-          >
-            Get Started
-          </motion.button>
+          <div className="flex items-center gap-3">
+            <motion.button
+              className="px-4 py-2 rounded-full font-medium text-emerald-600 border border-emerald-600 bg-white text-sm"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(16, 185, 129, 0.08)' }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleLogin}
+            >
+              Login
+            </motion.button>
+            <motion.button 
+              className="bg-emerald-600 text-white px-6 py-2 rounded-full font-medium cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleGetStarted}
+            >
+              Get Started
+            </motion.button>
+          </div>
         </motion.div>
       </header>
 
@@ -189,6 +202,7 @@ function LandingPage() {
               className="bg-white text-emerald-600 px-8 py-3 rounded-full font-medium shadow-lg"
               whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleGetStarted}
             >
               Get Started For Free
             </motion.button>
@@ -203,7 +217,7 @@ function LandingPage() {
             <div className="mb-8 md:mb-0">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-6 h-6 bg-emerald-400 rounded-full" />
-                <h3 className="text-xl font-bold">Sustain-ify</h3>
+                <h3 className="text-xl font-bold">Thrivable</h3>
               </div>
               <p className="max-w-xs text-emerald-300">
                 Guiding you toward a more sustainable lifestyle, one step at a time.

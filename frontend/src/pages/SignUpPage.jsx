@@ -27,7 +27,7 @@ const SignUpPage = () => {
     setLoading(true);
     try {
       await registerUser({ email, password, firstName, lastName });
-      navigate('/');
+      navigate('/dashboard'); // Redirect to dashboard or home page after successful sign up
     } catch (err) {
       // Show backend error if available
       if (err.response && err.response.data && err.response.data.error) {

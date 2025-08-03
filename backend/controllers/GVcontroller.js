@@ -715,6 +715,8 @@ const capitalizeWords = (str) => {
  * @param {object} res - Express response object
  */
 exports.identifyBrand = async (req, res) => {
+  console.log('Received brand identification request');
+  console.log(`Request file: ${req.file ? req.file.originalname : 'No file uploaded'}`);
   try {
     // Validate image upload
     if (!req.file) {
