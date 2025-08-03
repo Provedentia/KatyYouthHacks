@@ -5,5 +5,7 @@ const groqController = require('../controllers/groqController');
 
 router.post('/analyze', groqController.callGroq);
 
+router.post('keep-relevant-text', groqController.keepRelevantText);
+
 module.exports = router;
 

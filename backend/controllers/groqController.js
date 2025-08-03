@@ -15,7 +15,31 @@ exports.callGroq = async (req, res) => {
         if (!product || !description) {
             return res.status(400).json({ error: 'Missing product or description in request body.' });
         }
-        const prompt = `You are an expert environmental analyst. Analyze the following product and its description, and rate how good it is for the environment, giving it a score from 1 to 10. Provide a brief explanation for your score.\n\nProduct: ${product}\n\nDescription: ${description}`;
+        const prompt = `
+        
+You are an expert environmental analyst. Analyze ONLY the following product and its description. Focus exclusively on information about this specific product. 
+
+Extract the carbon dioxide (CO2) footprint from the description if available. If not available, state that clearly. 
+
+Provide environmental and eco tips, such as whether the product is recyclable, made from recycled materials, or has other eco-friendly features. 
+
+Respond in the following format:
+
+<Environmental Score>
+Score: [1-10]
+
+<CO2 Footprint>
+[CO2 info or 'Not available']
+
+<Environmental Tips>
+[Tips and eco-friendly features]
+
+<Explanation>
+[Brief explanation for your score]
+
+Product: ${product}
+
+Description: ${description}`;
         
         const completion = await groq.chat.completions.create({
             model: MODEL_ID,
@@ -23,7 +47,7 @@ exports.callGroq = async (req, res) => {
                 { role: "user", content: prompt }
             ],
         });
-        
+
         const result = completion.choices[0].message.content;
         res.json({ result });
     } catch (error) {
@@ -32,6 +56,32 @@ exports.callGroq = async (req, res) => {
     }
 };
 
+// Sends raw text and product name to Groq to keep only relevant sentences
+exports.keepRelevantText = async (req, res) => {
+    try {
+        const { rawText, productName } = req.body;
+        if (!rawText || !productName) {
+            return res.status(400).json({ error: 'Missing rawText or productName in request body.' });
+        }
+        const prompt = `
+You are a helpful assistant. Given the following text, return ONLY the sentences that are 
+directly relevant to the product: "${productName}". Do not include unrelated information. 
+Return the filtered sentences as a single string, preserving their original order.
+\n\nText:\n${rawText}
+`;
+        const completion = await groq.chat.completions.create({
+            model: MODEL_ID,
+            messages: [
+                { role: "user", content: prompt }
+            ],
+        });
+        const relevantText = completion.choices[0].message.content;
+        res.json({ relevantText });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to process request.' });
+    }
+};
 
 
 

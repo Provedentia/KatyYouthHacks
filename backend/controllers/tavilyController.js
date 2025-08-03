@@ -17,9 +17,12 @@ exports.tavilySearch = async (req, res) => {
     if (!query) {
       return res.status(400).json({ success: false, message: 'Query is required' });
     }
-    // Augment the query with environmental context
-    const envQuery = `${query} mountain dew baja blast environmental impact carbon footprint sustainability lifecycle analysis site:greenchoicenow.com`;
     
+    // Augment the query with environmental context
+    const envQuery = `${query} environmental impact carbon footprint sustainability lifecycle analysis site:greenchoicenow.com`;
+    
+    console.log('Tavily search query:', envQuery);
+
     if (!apiKey) {
       return res.status(500).json({ success: false, message: 'Tavily API key not set in .env' });
     }
@@ -43,6 +46,8 @@ exports.tavilySearch = async (req, res) => {
       return { url, score, cleaned_link };
     });
     // Return the list of objects
+    console.log('Tavily search results:', processedResults);
+    
     res.json({ success: true, results: processedResults });
   } catch (error) {
     // Handle any errors and return a 500 error
@@ -60,6 +65,7 @@ exports.extractTavilyData = async (req, res) => {
     }
     const response = await tvly.extract(urls, { format: 'text' }); // Use Tavily Extract API with format: 'text' for plain text extraction
 
+    console.log('Tavily extract response:', response);
     return res.json({ success: true, data: response });
   } catch (error) {
     console.error('Error in extractTavilyData:', error);
@@ -68,6 +74,7 @@ exports.extractTavilyData = async (req, res) => {
 }
 
 exports.tavilyCrawl = async (req, res) => {
+  console.log('Crawling with Tavily with body:', req.body);
   // 1) Basic presence + type checks
   let { url, productName } = req.body;
 
@@ -88,13 +95,16 @@ exports.tavilyCrawl = async (req, res) => {
 
   try {
     const response = await tvly.crawl(url, {
-      instructions: `Find all pages that are related to ${productName}`,
-      max_depth: 2,         // snake-case matches API spec
+      instructions: `Find all product pages that are related to ${productName}`,
+      max_depth: 5,        
       limit: 15,
       include_images: false,
     });
 
+    console.log("\nTavily crawl response:", response);
+
     return res.json({ success: true, ...response });
+
   } catch (error) {
     const status = error?.response?.status || 500;
     console.error("Error in tavilyCrawl:", error);
