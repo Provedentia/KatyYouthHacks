@@ -5,6 +5,8 @@ import TestFlow from './pages/TestFlow'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import UserProfile from './pages/UserProfile'
+import AboutPage from './pages/AboutPage'
+
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/user-profile" element={<UserProfile />} />
+      <Route path="/about" element={<AboutPage />} />
     </Routes>
   )
 }

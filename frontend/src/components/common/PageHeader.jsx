@@ -46,6 +46,17 @@ const PageHeader = ({ title, onBack, onProfile, showBackButton = true }) => {
             </motion.button>
           )}
         </div>
+        {showBackButton && (
+          <motion.button 
+            onClick={onBack}
+            className="flex items-center gap-2 text-emerald-700 hover:text-emerald-500 font-medium cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Logout
+          </motion.button>
+        )}
       </motion.div>
     </header>
   );
