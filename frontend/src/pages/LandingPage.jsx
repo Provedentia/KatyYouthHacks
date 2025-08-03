@@ -1,8 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Scan, Heart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+
 
 function LandingPage() {
+  const navigate = useNavigate();
+  const handleGetStarted = () => {
+    navigate('/get-started');
+  }
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-100 font-sans">
       {/* Header */}
@@ -27,9 +34,10 @@ function LandingPage() {
             <NavLink>Contact</NavLink>
           </div>
           <motion.button 
-            className="bg-emerald-600 text-white px-6 py-2 rounded-full font-medium"
+            className="bg-emerald-600 text-white px-6 py-2 rounded-full font-medium cursor-pointer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleGetStarted}
           >
             Get Started
           </motion.button>
@@ -53,14 +61,15 @@ function LandingPage() {
             </p>
             <div className="flex gap-4">
               <motion.button 
-                className="bg-emerald-600 text-white px-8 py-3 rounded-full font-medium shadow-lg shadow-emerald-200"
+                className="bg-emerald-600 text-white px-8 py-3 rounded-full font-medium shadow-lg shadow-emerald-200 cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleGetStarted}
               >
-                Download App
+                Get Started
               </motion.button>
               <motion.button 
-                className="border-2 border-emerald-600 text-emerald-600 px-6 py-3 rounded-full font-medium"
+                className="border-2 border-emerald-600 text-emerald-600 px-6 py-3 rounded-full font-medium cursor-pointer"
                 whileHover={{ scale: 1.05, backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -201,7 +210,7 @@ function LandingPage() {
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-              <div>
+              <div className='col-span-2'>
                 <h4 className="font-bold mb-4">Features</h4>
                 <ul className="space-y-2">
                   <FooterLink>DIY Projects</FooterLink>
@@ -209,27 +218,19 @@ function LandingPage() {
                   <FooterLink>Health Advisor</FooterLink>
                 </ul>
               </div>
-              <div>
+              {/* <div>
                 <h4 className="font-bold mb-4">Company</h4>
                 <ul className="space-y-2">
                   <FooterLink>About Us</FooterLink>
                   <FooterLink>Our Mission</FooterLink>
                   <FooterLink>Contact</FooterLink>
                 </ul>
-              </div>
-              <div>
-                <h4 className="font-bold mb-4">Legal</h4>
-                <ul className="space-y-2">
-                  <FooterLink>Privacy Policy</FooterLink>
-                  <FooterLink>Terms of Service</FooterLink>
-                  <FooterLink>Cookie Policy</FooterLink>
-                </ul>
-              </div>
+              </div> */}
             </div>
           </div>
-          <div className="border-t border-emerald-800 mt-12 pt-6 text-center text-emerald-400">
+          {/* <div className="border-t border-emerald-800 mt-12 pt-6 text-center text-emerald-400">
             <p>© {new Date().getFullYear()} Sustain-ify. All rights reserved.</p>
-          </div>
+          </div> */}
         </div>
       </footer>
     </div>
