@@ -28,7 +28,7 @@ const PageHeader = ({ title, onBack, showBackButton = true }) => {
             whileTap={{ scale: 0.95 }}
           >
             <ArrowLeft className="w-4 h-4" />
-            Back
+            Logout
           </motion.button>
         )}
       </motion.div>

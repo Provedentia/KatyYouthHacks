@@ -32,9 +32,12 @@ function LandingPage() {
             <h1 className="text-2xl font-bold text-emerald-800">Thrivable</h1>
           </div>
           <div className="hidden md:flex gap-8">
-            <NavLink>Features</NavLink>
-            <NavLink>About</NavLink>
-            <NavLink>Contact</NavLink>
+            <NavLink onClick={() => navigate('/')}>Home</NavLink>
+            <NavLink onClick={() => {
+              const el = document.getElementById('features-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}>Features</NavLink>
+            <NavLink onClick={() => navigate('/about')}>About</NavLink>
           </div>
           <div className="flex items-center gap-3">
             <motion.button
@@ -67,10 +70,10 @@ function LandingPage() {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-emerald-900 leading-tight mb-6">
-              Live sustainably with ease
+              Make <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Sustainable</span> Choices With Confidence
             </h2>
             <p className="text-lg text-emerald-800/80 mb-8 max-w-md">
-              Sustain-ify guides you toward a more sustainable lifestyle through personalized recommendations and practical solutions.
+              Thrivable helps you understand the environmental impact of everyday products and rewards your eco-friendly choices.
             </p>
             <div className="flex gap-4">
               <motion.button 
@@ -96,12 +99,98 @@ function LandingPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
-            <div className="w-full h-[400px] bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl shadow-xl overflow-hidden relative">
-              {/* Placeholder for app screenshot or illustration */}
-              <div className="absolute inset-0 flex items-center justify-center text-white">
-                <span className="text-xl font-medium">Sustainable Living at Your Fingertips</span>
+            {/* Desktop browser mockup */}
+            <div className="relative mx-auto w-[560px] bg-white rounded-xl shadow-2xl overflow-hidden">
+              {/* Browser header */}
+              <div className="bg-emerald-800 h-8 flex items-center px-4">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                </div>
+                <div className="ml-6 bg-emerald-700 rounded-md px-4 py-1 text-xs text-emerald-100 flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                  thrivable.org/dashboard
+                </div>
+              </div>
+              {/* Browser content - now in a more desktop-like aspect ratio */}
+              <div className="bg-gradient-to-b from-emerald-50 to-teal-100 p-5 h-[320px]">
+                {/* App header - more compact */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-emerald-500 rounded-full"></div>
+                    <div className="text-base font-bold text-emerald-800">Thrivable</div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-16 h-3 bg-emerald-200 rounded-full"></div>
+                    <div className="w-16 h-3 bg-emerald-200 rounded-full"></div>
+                    <div className="w-16 h-3 bg-emerald-200 rounded-full"></div>
+                  </div>
+                </div>
+                
+                {/* Content in a two-column layout for desktop style */}
+                <div className="flex gap-4 h-[260px]">
+                  {/* Left side - Upload area (simplified) */}
+                  <div className="bg-white rounded-xl p-4 shadow-md w-1/2">
+                    <div className="border-2 border-dashed border-emerald-300 rounded-lg p-4 flex flex-col items-center h-full justify-center">
+                      <motion.div 
+                        className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-500 mb-3"
+                        animate={{ 
+                          scale: [1, 1.05, 1],
+                        }}
+                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </motion.div>
+                      <p className="text-sm text-emerald-800 font-medium mb-2">Drag & drop product image</p>
+                      <button className="bg-emerald-500 text-white px-3 py-1.5 rounded-md text-sm">
+                        Upload Image
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Right side - Results */}
+                  <div className="bg-white rounded-xl shadow-md w-1/2 p-4 flex flex-col">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-4 h-4 bg-emerald-500 rounded-full"></div>
+                      <div className="text-sm font-semibold text-emerald-800">Eco Score</div>
+                    </div>
+                    
+                    {/* Score display - replaced spinning circle with static score */}
+                    <div className="flex-1 flex items-center justify-center">
+                      <div className="bg-emerald-50 rounded-lg p-4 text-center">
+                        <div className="flex items-end justify-center">
+                          <span className="text-3xl font-bold text-emerald-800">85</span>
+                          <span className="text-xl text-emerald-600  mb-0.5">/100</span>
+                        </div>
+                        {/* Removed "Excellent" */}
+                        <div className="w-full h-2 bg-emerald-100 rounded-full mt-4">
+                          <div className="bg-emerald-500 h-full rounded-full w-[85%]"></div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2 mt-3">
+                      <div className="text-xs font-medium text-emerald-800 mb-1">Sustainable Alternatives</div>
+                      <div className="p-1.5 bg-emerald-50 rounded-lg flex items-center gap-2">
+                        <div className="w-6 h-6 bg-emerald-200 rounded-md"></div>
+                        <div className="flex-1 h-2 bg-emerald-100 rounded-full"></div>
+                        {/* Removed percentage */}
+                      </div>
+                      <div className="p-1.5 bg-emerald-50 rounded-lg flex items-center gap-2">
+                        <div className="w-6 h-6 bg-emerald-200 rounded-md"></div>
+                        <div className="flex-1 h-2 bg-emerald-100 rounded-full"></div>
+                        {/* Removed percentage */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+            
             {/* Decorative elements */}
             <motion.div 
               className="absolute -bottom-6 -left-6 w-20 h-20 bg-emerald-200 rounded-xl"
@@ -124,7 +213,7 @@ function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="container mx-auto px-6 py-16 md:py-24">
+      <section id="features-section" className="container mx-auto px-6 py-16 md:py-24">
         <motion.div 
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -132,29 +221,29 @@ function LandingPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-emerald-900 mb-4">Three Ways to Live Sustainably</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-emerald-900 mb-4">Make Sustainability Simple</h2>
           <p className="text-lg text-emerald-800/80 max-w-2xl mx-auto">
-            Sustain-ify offers a trio of powerful features to help you make environmentally conscious decisions.
+            Thrivable offers powerful features to help you make environmentally conscious decisions every day.
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <FeatureCard 
             icon={<Camera className="w-7 h-7" />}
-            title="DIY Project Generator"
-            description="Upload a picture of a household item and get creative do-it-yourself projects to repurpose it instead of throwing it away."
+            title="Eco-Shopping Assistant"
+            description="Take or upload a picture of a product to see its environmental impact score and get recommendations for more sustainable alternatives."
             delay={0.1}
           />
           <FeatureCard 
             icon={<Scan className="w-7 h-7" />}
-            title="Eco-Shopping Assistant"
-            description="Scan a product's barcode to see its environmental impact score and get recommendations for more sustainable alternatives."
+            title="Sustainability Leaderboard"
+            description="Track your accumulated sustainability score and compete with others on a global leaderboard. See how your choices make a difference."
             delay={0.3}
           />
           <FeatureCard 
             icon={<Heart className="w-7 h-7" />}
-            title="Health & Wellness Advisor"
-            description="Upload health reports to receive personalized shopping advice that aligns with both your health needs and sustainability goals."
+            title="Environmental Impact Insights"
+            description="Get detailed analysis of products' environmental footprint, including carbon emissions, recyclability, and practical eco-friendly tips."
             delay={0.5}
           />
         </div>
@@ -191,12 +280,11 @@ function LandingPage() {
             />
           </div>
           
-          <div className="relative z-10 text-center max-w-2xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to transform your lifestyle?
+          <div className="relative z-10 text-center max-w-2xl mx-auto">              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Ready to make sustainable choices?
             </h2>
             <p className="text-lg mb-8 text-white/90">
-              Join thousands of users who have already made the switch to a more sustainable way of living with Sustain-ify.
+              Join our community of eco-conscious users who are making a difference with every product choice.
             </p>
             <motion.button 
               className="bg-white text-emerald-600 px-8 py-3 rounded-full font-medium shadow-lg"
@@ -227,24 +315,13 @@ function LandingPage() {
               <div className='col-span-2'>
                 <h4 className="font-bold mb-4">Features</h4>
                 <ul className="space-y-2">
-                  <FooterLink>DIY Projects</FooterLink>
-                  <FooterLink>Eco-Shopping</FooterLink>
-                  <FooterLink>Health Advisor</FooterLink>
+                  <FooterLink>Eco-Shopping Assistant</FooterLink>
+                  <FooterLink>Sustainability Leaderboard</FooterLink>
+                  <FooterLink>Environmental Impact Insights</FooterLink>
                 </ul>
               </div>
-              {/* <div>
-                <h4 className="font-bold mb-4">Company</h4>
-                <ul className="space-y-2">
-                  <FooterLink>About Us</FooterLink>
-                  <FooterLink>Our Mission</FooterLink>
-                  <FooterLink>Contact</FooterLink>
-                </ul>
-              </div> */}
             </div>
           </div>
-          {/* <div className="border-t border-emerald-800 mt-12 pt-6 text-center text-emerald-400">
-            <p>© {new Date().getFullYear()} Sustain-ify. All rights reserved.</p>
-          </div> */}
         </div>
       </footer>
     </div>
@@ -252,9 +329,10 @@ function LandingPage() {
 }
 
 // Utility Components
-const NavLink = ({ children }) => (
+const NavLink = ({ children, onClick }) => (
   <motion.a 
-    href="#" 
+    href="#"
+    onClick={onClick}
     className="text-emerald-700 hover:text-emerald-500 font-medium"
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
@@ -298,5 +376,6 @@ const FooterLink = ({ children }) => (
     </motion.a>
   </li>
 );
+
 
 export default LandingPage;
