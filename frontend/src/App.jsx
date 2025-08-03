@@ -9,7 +9,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/get-started" element={<GetStartedPage />} />
+      <Route path="/dashboard" element={<GetStartedPage />} />
       <Route path="/test-flow" element={<TestFlow />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
