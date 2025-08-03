@@ -14,4 +14,7 @@ router.post('/identify-brand',
   GVcontroller.identifyBrand
 );
 
+router.post('/test-upload', GVcontroller.uploadMiddleware, GVcontroller.testImageUpload)
+
+
 module.exports = router; 

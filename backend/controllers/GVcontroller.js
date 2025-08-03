@@ -852,3 +852,24 @@ exports.identifyBrand = async (req, res) => {
 
 // Export multer upload middleware for use in routes
 exports.uploadMiddleware = upload.single('image'); 
+
+
+// Simple image upload endpoint for testing frontend-backend connection
+exports.testImageUpload = async (req, res) => {
+  console.log('Received test image upload request');
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No image file uploaded.' });
+    }
+    // Optionally log file info
+    console.log('Received image upload:', req.file.originalname, req.file.size, 'bytes');
+    
+    // Respond with a simple message
+    res.json({ success: true, message: 'Image sent to backend!' });
+  } catch (error) {
+    console.error('Error in testImageUpload:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+

@@ -4,12 +4,14 @@ import { AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/common/PageHeader';
 import ImageCapture from '../components/ImageCapture/ImageCapture';
+import { sendImageToBackend } from '../services/imageService';
 
 function GetStartedPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('environmental');
   const [capturedImage, setCapturedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState('');
 
   const handleBack = () => {
     navigate('/');
@@ -17,6 +19,22 @@ function GetStartedPage() {
 
   const handleImageCapture = (imageData) => {
     setCapturedImage(imageData);
+    setUploadMessage('');
+  };
+
+  // New: handle sending image to backend
+  const handleSendImage = async () => {
+    if (!capturedImage) return;
+    setIsLoading(true);
+    setUploadMessage('');
+    try {
+      const res = await sendImageToBackend(capturedImage);
+      setUploadMessage(res.message || 'Upload successful!');
+    } catch (err) {
+      setUploadMessage('Upload failed.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -36,10 +54,27 @@ function GetStartedPage() {
           transition={{ duration: 0.7 }}
         >
           {/* Left Side - Image Capture */}
-          <ImageCapture 
-            onImageCapture={handleImageCapture}
-            capturedImage={capturedImage}
-          />
+          <div>
+            <ImageCapture 
+              onImageCapture={handleImageCapture}
+              capturedImage={capturedImage}
+            />
+            {/* Upload button and message */}
+            {capturedImage && (
+              <div className="mt-4 flex flex-col items-center">
+                <button
+                  onClick={handleSendImage}
+                  className="bg-emerald-600 text-white px-4 py-2 rounded disabled:opacity-50"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Uploading...' : 'Analyze Image'}
+                </button>
+                {uploadMessage && (
+                  <div className="mt-2 text-emerald-700">{uploadMessage}</div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Right Side - Information Tabs */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
