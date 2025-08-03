@@ -292,7 +292,7 @@ function LandingPage() {
               whileTap={{ scale: 0.95 }}
               onClick={handleGetStarted}
             >
-              Get Started For Free
+              Get Started
             </motion.button>
           </div>
         </motion.div>
