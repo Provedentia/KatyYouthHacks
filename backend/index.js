@@ -14,12 +14,13 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/', mainRoutes);
 app.use('/tavily', tavilyRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/identify-brand', GVRoutes);
+app.use('/api', GVRoutes);
 app.use('/groq', groqRoutes);
 // Start server
 app.listen(PORT, () => {
