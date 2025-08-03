@@ -21,7 +21,6 @@ app.use('/tavily', tavilyRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/identify-brand', GVRoutes);
 app.use('/groq', groqRoutes);
-
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
