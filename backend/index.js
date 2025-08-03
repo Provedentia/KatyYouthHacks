@@ -5,6 +5,7 @@ const tavilyRoutes = require('./routes/tavilyRoutes');
 const authRoutes = require('./routes/authRoutes');
 const GVRoutes = require('./routes/GVRoutes');
 const groqRoutes = require('./routes/groqRoutes');
+const scoreRoutes = require('./routes/scoreRoutes');
 require('dotenv').config();
 
 // Initialize Express
@@ -22,6 +23,7 @@ app.use('/tavily', tavilyRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', GVRoutes);
 app.use('/groq', groqRoutes);
+app.use('/api/scores', scoreRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

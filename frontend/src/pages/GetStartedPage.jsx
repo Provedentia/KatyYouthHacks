@@ -7,16 +7,17 @@ import ImageCapture from '../components/ImageCapture/ImageCapture';
 import { identifyBrandWithImage } from '../services/imageService';
 import { searchProduct, extractLinks } from '../services/searchService';
 import { analyzeGroq } from '../services/groqService';
+import { updateUserScore, getUserScore } from '../services/scoreService';
 
 function GetStartedPage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('environmental');
   const [capturedImage, setCapturedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState('');
   const [brandResult, setBrandResult] = useState(null);
   const [groqResult, setGroqResult] = useState(null);
   const [error, setError] = useState('');
+  const [scoreUpdateStatus, setScoreUpdateStatus] = useState(null);
 
   const handleBack = () => {
     navigate('/');
@@ -36,6 +37,7 @@ function GetStartedPage() {
     setBrandResult(null);
     setGroqResult(null);
     setError('');
+    setScoreUpdateStatus(null);
     try {
       // 1. Identify product from image
       const brandRes = await identifyBrandWithImage(capturedImage);
@@ -57,6 +59,56 @@ function GetStartedPage() {
       if (combinedText) {
         const groqRes = await analyzeGroq(product, combinedText);
         setGroqResult(groqRes);
+        
+        // 5. Parse score and update user's score in database
+        let scoreValue = null;
+        if (groqRes && typeof groqRes === 'object' && groqRes.result) {
+          const scoreMatch = groqRes.result.match(/Score:\s*(\d+)/i);
+          scoreValue = scoreMatch ? parseInt(scoreMatch[1], 10) : null;
+        } else if (typeof groqRes === 'string') {
+          const scoreMatch = groqRes.match(/Score:\s*(\d+)/i);
+          scoreValue = scoreMatch ? parseInt(scoreMatch[1], 10) : null;
+        }
+        
+        // If we have a valid score, update the user's score
+        if (scoreValue !== null) {
+          try {
+            // Using the updated API endpoint that expects points
+            console.log('Attempting updating user score with value:', scoreValue);
+            const scoreUpdateResult = await updateUserScore(scoreValue);
+            console.log('Score updated:', scoreUpdateResult);
+            
+            // Get user's updated score to display
+            const userScoreData = await getUserScore();
+            console.log('User score data:', userScoreData);
+            
+            setScoreUpdateStatus({
+              success: true,
+              message: `Your eco-score has been updated! +${scoreValue} points.`,
+              totalScore: userScoreData?.data?.user?.score || 0
+            });
+          } catch (scoreErr) {
+            console.error('Failed to update score:', scoreErr);
+            
+            // Extract the error message from the response, or use a fallback message
+            let errorMessage = 'Could not update your eco-score.';
+            
+            if (scoreErr.response && scoreErr.response.data) {
+              // If there's a response with data, use the error message from the backend
+              errorMessage = scoreErr.response.data.error || errorMessage;
+              console.error('Backend error details:', scoreErr.response.data);
+            } else if (scoreErr.message) {
+              // If there's no response data but there is an error message, use it
+              errorMessage = scoreErr.message;
+            }
+            
+            setScoreUpdateStatus({
+              success: false,
+              message: `Error: ${errorMessage}`
+            });
+          }
+        }
+        
         setUploadMessage('Analysis complete!'); // Only after Groq result
         console.log('Identified:', brandRes);
         console.log('Groq Analysis:', groqRes);
@@ -113,6 +165,18 @@ function GetStartedPage() {
                 </button>
                 {uploadMessage && !isLoading && (
                   <div className="mt-2 text-emerald-700">{uploadMessage}</div>
+                )}
+                {scoreUpdateStatus && (
+                  <div className={`mt-2 ${scoreUpdateStatus.success ? 'text-emerald-700' : 'text-red-600'} 
+                      bg-${scoreUpdateStatus.success ? 'emerald' : 'red'}-50 p-3 rounded-md 
+                      border border-${scoreUpdateStatus.success ? 'emerald' : 'red'}-200 w-full`}>
+                    <div className={`${scoreUpdateStatus.success ? '' : 'font-medium'}`}>{scoreUpdateStatus.message}</div>
+                    {scoreUpdateStatus.success && (
+                      <div className="mt-1 font-medium">
+                        Total Score: {scoreUpdateStatus.totalScore !== null && scoreUpdateStatus.totalScore !== undefined ? scoreUpdateStatus.totalScore : 'Loading...'}
+                      </div>
+                    )}
+                  </div>
                 )}
                 {error && (
                   <div className="mt-2 text-red-600">{error}</div>

@@ -117,10 +117,12 @@ exports.getLeaderboard = async (req, res) => {
  */
 exports.updateScore = async (req, res) => {
   try {
+    console.log('Received update score request. Body:', req.body);
     const { points, userid } = req.body;
     
     // Validate points input
-    if (typeof points !== 'number' || points <= 0) {
+    if (typeof points !== 'number' || points < 0) {
+      console.log('Invalid points value:', points, typeof points);
       return res.status(400).json({
         success: false,
         error: 'Points must be a positive number'
@@ -129,6 +131,7 @@ exports.updateScore = async (req, res) => {
 
     // Validate userid input
     if (!userid) {
+      console.log('Missing userid in request');
       return res.status(400).json({
         success: false,
         error: 'User ID is required'
@@ -166,6 +169,7 @@ exports.updateScore = async (req, res) => {
  * @param {object} res - Express response object
  */
 exports.getUserScore = async (req, res) => {
+  console.log('Fetching user score for:', req.params.userid);
   try {
     const { userid } = req.params;
 
