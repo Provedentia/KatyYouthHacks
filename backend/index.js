@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const mainRoutes = require('./routes/mainRoutes');
-const tavilyRoutes = require('./routes/tavily');
+const tavilyRoutes = require('./routes/tavilyRoutes');
+const authRoutes = require('./routes/authRoutes');
+const GVRoutes = require('./routes/GVRoutes');
 const groqRoutes = require('./routes/groqRoutes');
 require('dotenv').config();
 
@@ -16,6 +18,8 @@ app.use(express.json());
 // Routes
 app.use('/', mainRoutes);
 app.use('/tavily', tavilyRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/identify-brand', GVRoutes);
 app.use('/groq', groqRoutes);
 
 // Start server
