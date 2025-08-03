@@ -41,7 +41,8 @@ This project is a monorepo containing a blazing-fast React frontend and a powerf
 ---
 
 ## Project Workflow Diagram
-<img width="883" height="651" alt="image" src="https://github.com/user-attachments/assets/fd22c0cc-8727-44cc-9af2-f36d7f25fa1c" />
+<img width="858" height="643" alt="image" src="https://github.com/user-attachments/assets/e3010725-1331-41fd-aa4a-592ac3aff205" />
+
 
 
 ---
