@@ -6,6 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const scoreController = require('../controllers/scoreController');
+const checkAuth = require('../middleware/checkAuth');
 
 /**
  * @route   GET /api/scores/leaderboard
@@ -18,17 +19,17 @@ router.get('/leaderboard', scoreController.getLeaderboard);
 /**
  * @route   GET /api/scores/:userid
  * @desc    Get user's score and rank by user ID
- * @access  Public (will be protected by middleware)
+ * @access  Protected
  * @param   userid - User ID parameter
  */
-router.get('/:userid', scoreController.getUserScore);
+router.get('/:userid', checkAuth, scoreController.getUserScore);
 
 /**
  * @route   POST /api/scores/update_score
  * @desc    Update user's score by adding points
- * @access  Public (will be protected by middleware)
+ * @access  Protected
  * @body    { "points": number, "userid": string }
  */
-router.post('/update_score', scoreController.updateScore);
+router.post('/update_score', checkAuth, scoreController.updateScore);
 
 module.exports = router; 
