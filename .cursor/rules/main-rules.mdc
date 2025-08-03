@@ -1,9 +1,6 @@
 ---
-description:
-globs:
-alwaysApply: false
+alwaysApply: true
 ---
-
 # Coding pattern preferences
 
 – Always prefer simple solutions  
