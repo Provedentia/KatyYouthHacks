@@ -85,6 +85,9 @@ function LandingPage() {
                 className="border-2 border-emerald-600 text-emerald-600 px-6 py-3 rounded-full font-medium cursor-pointer"
                 whileHover={{ scale: 1.05, backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => {
+              const el = document.getElementById('features-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' })}}
               >
                 Learn More
               </motion.button>
